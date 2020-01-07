@@ -244,30 +244,50 @@ class Entity:
     def __init__(
             self,
             name: str,
-            address: Optiona[str],
-            city: Optional[str],
-            region: Optional[str],
-            post_code: Optional[str],
-            country: Optional[str],
-            orcid: Optional[str],
-            email: Optional[str],
-            tel: Optional[str],
-            fax: Optional[str],
-            website: Optional[str],
-            date_start: Optional[datetime],
-            date_end: Optional[datetime],
-            location: Optional[str]
+            address: Optional[str] = None,
+            city: Optional[str] = None,
+            region: Optional[str] = None,
+            post_code: Optional[str] = None,
+            country: Optional[str] = None,
+            orcid: Optional[str] = None,
+            email: Optional[str] = None,
+            tel: Optional[str] = None,
+            fax: Optional[str] = None,
+            website: Optional[str] = None,
+            date_start: Optional[datetime] = None,
+            date_end: Optional[datetime] = None,
+            location: Optional[str] = None
             ) -> None:
         """Create an Entity object.
 
         Args:
             See the standard.
         """
-        _check_arg_orcid(orcid)
-        _check_arg_regex(email, '^[\S]+@[\S]+\.[\S]{2,}$')
-        _check_arg_url(website)
-        _check_is_date(date_start)
-        _check_is_date(date_end)
+        if orcid is not None:
+            _check_arg_orcid(orcid)
+        if email in not None:
+            _check_arg_regex(email, '^[\S]+@[\S]+\.[\S]{2,}$')
+        if website is not None:
+            _check_arg_url(website)
+        if date_start is not None:
+            _check_is_date(date_start)
+        if date_end is not None:
+            _check_is_date(date_end)
+
+        self.name = name
+        self.address = address
+        self.city = city
+        self.region = region
+        self.post_code = post_code
+        self.country = country
+        self.orcid = orcid
+        self.email = email
+        self.tel = tel
+        self.fax = fax
+        self.website = website
+        self.date_start = date_start
+        self.date_end = date_end
+        self.location = location
 
 
 class Reference:
