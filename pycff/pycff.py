@@ -162,7 +162,7 @@ def _check_arg_set(value: str, legal_values: List[str]) -> None:
 def _check_is_date(value: datetime) -> None:
     if (
             value.hour != 0 or value.minute != 0 or value.second != 0 or
-            value.microsecond != 0 or tzinfo is not None):
+            value.microsecond != 0 or value.tzinfo is not None):
         raise RuntimeError('Invalid date containing time of day "{}".'.format(
             value))
 
@@ -228,11 +228,11 @@ class Person:
         self.website = website
 
     @classmethod
-    def yatiml_savorize(cls, node: yatiml.Node) -> None:
+    def _yatiml_savorize(cls, node: yatiml.Node) -> None:
         node.dashes_to_unders_in_keys()
 
     @classmethod
-    def yatiml_sweeten(cls, node: yatiml.Node) -> None:
+    def _yatiml_sweeten(cls, node: yatiml.Node) -> None:
         node.unders_to_dashes_in_keys()
 
 
@@ -467,12 +467,12 @@ class Reference:
                 self.year_original = year_original
 
     @classmethod
-    def yatiml_savorize(cls, node: yatiml.Node) -> None:
+    def _yatiml_savorize(cls, node: yatiml.Node) -> None:
         node.dashes_to_unders_in_keys()
         node.rename_attribute('type', 'typ')
 
     @classmethod
-    def yatiml_sweeten(cls, node: yatiml.Node) -> None:
+    def _yatiml_sweeten(cls, node: yatiml.Node) -> None:
         node.rename_attribute('typ', 'type')
         node.unders_to_dashes_in_keys()
 
@@ -486,7 +486,7 @@ class CitationCFF:
             title: str,
             version: str,
             authors: List[Union[Person, Entity]],
-            date_released: str,
+            date_released: datetime,
             abstract: Optional[str] = None,
             identifiers: Optional[List[Identifier]] = None,
             keywords: Optional[str] = None,
@@ -507,15 +507,23 @@ class CitationCFF:
             See the spec
         """
         _check_arg_regex(cff_version, '1\.1\.0')
-        _check_arg_regex(commit, '^[a-f0-9]{7,40}$')
+        if commit is not None:
+            _check_arg_regex(commit, '^[a-f0-9]{7,40}$')
         _check_is_date(date_released)
-        _check_arg_doi(doi)
-        _check_arg_set(license, _valid_license_strings)
-        _check_arg_url(license_url)
-        _check_arg_url(repository)
-        _check_arg_url(repository_code)
-        _check_arg_url(repository_artifact)
-        _check_arg_url(url)
+        if doi is not None:
+            _check_arg_doi(doi)
+        if license is not None:
+            _check_arg_set(license, _valid_license_strings)
+        if license_url is not None:
+            _check_arg_url(license_url)
+        if repository is not None:
+            _check_arg_url(repository)
+        if repository_code is not None:
+            _check_arg_url(repository_code)
+        if repository_artifact is not None:
+            _check_arg_url(repository_artifact)
+        if url is not None:
+            _check_arg_url(url)
 
         self.cff_version = cff_version
         self.message = message
@@ -538,9 +546,21 @@ class CitationCFF:
         self.url = url
 
     @classmethod
-    def yatiml_savorize(cls, node: yatiml.Node) -> None:
+    def _yatiml_savorize(cls, node: yatiml.Node) -> None:
         node.dashes_to_unders_in_keys()
 
     @classmethod
-    def yatiml_sweeten(cls, node: yatiml.Node) -> None:
+    def _yatiml_sweeten(cls, node: yatiml.Node) -> None:
         node.unders_to_dashes_in_keys()
+
+
+_all_classes = (CitationCFF, Identifier, Person, Entity, Reference)
+
+
+load = yatiml.load_function(*_all_classes)
+
+
+dump = yatiml.dump_function(*_all_classes)
+
+
+dumps = yatiml.dumps_function(*_all_classes)
