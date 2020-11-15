@@ -159,6 +159,7 @@ def _check_arg_set(value: str, legal_values: List[str]) -> None:
     if value not in legal_values:
         raise RuntimeError('Invalid value {}'.format(value))
 
+
 def _check_is_date(value: datetime) -> None:
     if (
             value.hour != 0 or value.minute != 0 or value.second != 0 or
@@ -206,10 +207,14 @@ class Person:
             website: Optional[str] = None
             ) -> None:
 
-        _check_arg_set(country, _valid_country_codes)
-        _check_arg_orcid(orcid)
-        _check_arg_regex(email, '^[\S]+@[\S]+\.[\S]{2,}$')
-        _check_arg_url(website)
+        if country is not None:
+            _check_arg_set(country, _valid_country_codes)
+        if orcid is not None:
+            _check_arg_orcid(orcid)
+        if email is not None:
+            _check_arg_regex(email, '^[\S]+@[\S]+\.[\S]{2,}$')
+        if website is not None:
+            _check_arg_url(website)
 
         self.family_names = family_names
         self.given_names = given_names
@@ -298,74 +303,74 @@ class Reference:
             typ: str,       # really 'type'
             authors: List[Union[Entity, Person]],
             title: str,
-            abbrevation: Optional[str],
-            abstract: Optional[str],
-            collection_doi: Optional[str],
-            collection_title: Optional[str],
-            collection_type: Optional[str],
-            commit: Optional[str],
-            conference: Optional[Entity],
-            contact: Optional[List[Union[Entity, Person]]],
-            copyright: Optional[str],
-            data_type: Optional[str],
-            database: Optional[str],
-            database_provider: Optional[Entity],
-            date_accessed: Optional[datetime],
-            date_downloaded: Optional[datetime],
-            date_published: Optional[datetime],
-            date_released: Optional[datetime],
-            department: Optional[str],
-            doi: Optional[str],
-            edition: Optional[str],
-            editors: Optional[List[Union[Entity, Person]]],
-            editors_series: Optional[List[Union[Entity, Person]]],
-            end: Optional[int],
-            entry: Optional[str],
-            filename: Optional[str],
-            format: Optional[str],
-            identifiers: Optional[List[Identifier]],
-            institution: Optional[Entity],
-            isbn: Optional[str],
-            issn: Optional[str],
-            issue: Optional[int],
-            issue_date: Optional[str],
-            issue_title: Optional[str],
-            journal: Optional[str],
-            keywords: Optional[List[str]],
-            languages: Optional[List[str]],
-            license: Optional[str],
-            license_url: Optional[str],
-            location: Optional[Entity],
-            loc_start: Optional[int],
-            loc_end: Optional[int],
-            medium: Optional[str],
-            month: Optional[int],
-            nihmsid: Optional[str],
-            notes: Optional[str],
-            number: Optional[str],
-            number_volumes: Optional[int],
-            pages: Optional[int],
-            patent_states: Optional[List[str]],
-            pmcid: Optional[str],
-            publisher: Optional[Entity],
-            recipients: Optional[List[Union[Entity, Person]]],
-            repository: Optional[str],
-            repository_code: Optional[str],
-            repository_artifact: Optional[str],
-            scope: Optional[str],
-            section: Optional[str],
-            senders: Optional[List[Union[Entity, Person]]],
-            status: Optional[str],
-            start: Optional[int],
-            term: Optional[str],
-            thesis_type: Optional[str],
-            translators: Optional[List[Union[Entity, Person]]],
-            url: Optional[str],
-            version: Optional[str],
-            volume: Optional[int],
-            volume_title: Optional[str],
-            year: Optional[int],
-            year_original: Optional[int]
+            abbreviation: Optional[str] = None,
+            abstract: Optional[str] = None,
+            collection_doi: Optional[str] = None,
+            collection_title: Optional[str] = None,
+            collection_type: Optional[str] = None,
+            commit: Optional[str] = None,
+            conference: Optional[Entity] = None,
+            contact: Optional[List[Union[Entity, Person]]] = None,
+            copyright: Optional[str] = None,
+            data_type: Optional[str] = None,
+            database: Optional[str] = None,
+            database_provider: Optional[Entity] = None,
+            date_accessed: Optional[datetime] = None,
+            date_downloaded: Optional[datetime] = None,
+            date_published: Optional[datetime] = None,
+            date_released: Optional[datetime] = None,
+            department: Optional[str] = None,
+            doi: Optional[str] = None,
+            edition: Optional[str] = None,
+            editors: Optional[List[Union[Entity, Person]]] = None,
+            editors_series: Optional[List[Union[Entity, Person]]] = None,
+            end: Optional[int] = None,
+            entry: Optional[str] = None,
+            filename: Optional[str] = None,
+            format: Optional[str] = None,
+            identifiers: Optional[List[Identifier]] = None,
+            institution: Optional[Entity] = None,
+            isbn: Optional[str] = None,
+            issn: Optional[str] = None,
+            issue: Optional[int] = None,
+            issue_date: Optional[str] = None,
+            issue_title: Optional[str] = None,
+            journal: Optional[str] = None,
+            keywords: Optional[List[str]] = None,
+            languages: Optional[List[str]] = None,
+            license: Optional[str] = None,
+            license_url: Optional[str] = None,
+            location: Optional[Entity] = None,
+            loc_start: Optional[int] = None,
+            loc_end: Optional[int] = None,
+            medium: Optional[str] = None,
+            month: Optional[int] = None,
+            nihmsid: Optional[str] = None,
+            notes: Optional[str] = None,
+            number: Optional[str] = None,
+            number_volumes: Optional[int] = None,
+            pages: Optional[int] = None,
+            patent_states: Optional[List[str]] = None,
+            pmcid: Optional[str] = None,
+            publisher: Optional[Entity] = None,
+            recipients: Optional[List[Union[Entity, Person]]] = None,
+            repository: Optional[str] = None,
+            repository_code: Optional[str] = None,
+            repository_artifact: Optional[str] = None,
+            scope: Optional[str] = None,
+            section: Optional[str] = None,
+            senders: Optional[List[Union[Entity, Person]]] = None,
+            status: Optional[str] = None,
+            start: Optional[int] = None,
+            term: Optional[str] = None,
+            thesis_type: Optional[str] = None,
+            translators: Optional[List[Union[Entity, Person]]] = None,
+            url: Optional[str] = None,
+            version: Optional[str] = None,
+            volume: Optional[int] = None,
+            volume_title: Optional[str] = None,
+            year: Optional[int] = None,
+            year_original: Optional[int] = None
             ) -> None:
                 """Create a Reference object.
 
@@ -459,12 +464,16 @@ class Reference:
                 self.thesis_type = thesis_type
                 self.title = title
                 self.translators = translators
-                self.url = url,
-                self.version = version,
-                self.volume = volume,
-                self.volume_title = volume_title,
-                self.year = year,
+                self.url = url
+                self.version = version
+                self.volume = volume
+                self.volume_title = volume_title
+                self.year = year
                 self.year_original = year_original
+
+    @classmethod
+    def _yatiml_recognize(cls, node: yatiml.UnknownNode) -> None:
+        pass
 
     @classmethod
     def _yatiml_savorize(cls, node: yatiml.Node) -> None:
