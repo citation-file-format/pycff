@@ -417,7 +417,7 @@ class Reference:
                 self.date_downloaded = date_downloaded
                 self.date_published = date_published
                 self.date_released = date_released
-                self.dapartment = department
+                self.department = department
                 self.doi = doi
                 self.edition = edition
                 self.editors = editors
@@ -469,6 +469,71 @@ class Reference:
                 self.volume = volume
                 self.volume_title = volume_title
                 self.year = year
+                self.year_original = year_original
+
+    @classmethod
+    def _yatiml_recognize(cls, node: yatiml.UnknownNode) -> None:
+        pass
+
+    @classmethod
+    def _yatiml_savorize(cls, node: yatiml.Node) -> None:
+        node.dashes_to_unders_in_keys()
+        node.rename_attribute('type', 'typ')
+
+    @classmethod
+    def _yatiml_sweeten(cls, node: yatiml.Node) -> None:
+        node.rename_attribute('typ', 'type')
+        node.unders_to_dashes_in_keys()
+
+
+class BookReference(Reference):
+    """A class representing a reference to a book.
+    """
+    def __init__(
+            self,
+            typ: str,       # really 'type'
+            title: str,
+            publisher: Entity,
+            year: int,
+            authors: Optional[List[Union[Entity, Person]]] = None,
+            editors: Optional[List[Union[Entity, Person]]] = None,
+            edition: Optional[str] = None,
+            editors_series: Optional[List[Union[Entity, Person]]] = None,
+            isbn: Optional[str] = None,
+            month: Optional[int] = None,
+            notes: Optional[str] = None,
+            number: Optional[str] = None,
+            number_volumes: Optional[int] = None,
+            volume: Optional[int] = None,
+            volume_title: Optional[str] = None,
+            year_original: Optional[int] = None
+            ) -> None:
+                """Create a BookReference object.
+
+                Args:
+                    See the CFF standard.
+                """
+                # TODO: check reference type
+                _check_arg_set(typ, _valid_reference_types)
+                if authors is None and editors is None:
+                    raise RuntimeError(
+                            'Either and author or an editor is required')
+
+                self.typ = typ
+                self.title = title
+                self.publisher = publisher
+                self.year = year
+                self.authors = authors
+                self.editors = editors
+                self.edition = edition
+                self.editors_series = editors_series
+                self.isbn = isbn
+                self.month = month
+                self.notes = notes
+                self.number = number
+                self.number_volumes = number_volumes
+                self.volume = volume
+                self.volume_title = volume_title
                 self.year_original = year_original
 
     @classmethod

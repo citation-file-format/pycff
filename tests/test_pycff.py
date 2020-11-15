@@ -74,3 +74,23 @@ def test_load_reference():
     assert isinstance(ref.publisher, pycff.Entity)
     assert ref.publisher.name == 'Science \'r Us Ltd.'
     assert ref.publisher.city == 'Amsterdam'
+
+
+def test_load_book_reference():
+    load = yatiml.load_function(
+            pycff.Reference, pycff.BookReference, pycff.Entity, pycff.Person,
+            pycff.Identifier)
+
+    text = (
+            'type: book\n'
+            'title: Introduction to Basic Stuff\n'
+            'publisher:\n'
+            '  name: Science \'r Us Ltd.\n'
+            '  city: Amsterdam\n'
+            'year: 2019\n'
+            'authors:\n'
+            '  - family-names: Wu\n'
+            '    given-names: Stacey\n')
+
+    ref = load(text)
+    assert isinstance(ref, pycff.BookReference)
