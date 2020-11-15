@@ -228,11 +228,11 @@ class Person:
         self.website = website
 
     @classmethod
-    def yatiml_savorize(cls, node: yatiml.ClassNode) -> None:
+    def yatiml_savorize(cls, node: yatiml.Node) -> None:
         node.dashes_to_unders_in_keys()
 
     @classmethod
-    def yatiml_sweeten(cls, node: yatiml.ClassNode) -> None:
+    def yatiml_sweeten(cls, node: yatiml.Node) -> None:
         node.unders_to_dashes_in_keys()
 
 
@@ -265,7 +265,7 @@ class Entity:
         """
         if orcid is not None:
             _check_arg_orcid(orcid)
-        if email in not None:
+        if email is not None:
             _check_arg_regex(email, '^[\S]+@[\S]+\.[\S]{2,}$')
         if website is not None:
             _check_arg_url(website)
@@ -296,7 +296,7 @@ class Reference:
     def __init__(
             self,
             typ: str,       # really 'type'
-            authors: List[Union[Entity, Person]]],
+            authors: List[Union[Entity, Person]],
             title: str,
             abbrevation: Optional[str],
             abstract: Optional[str],
@@ -460,19 +460,19 @@ class Reference:
                 self.title = title
                 self.translators = translators
                 self.url = url,
-                self.version = version.
+                self.version = version,
                 self.volume = volume,
                 self.volume_title = volume_title,
                 self.year = year,
                 self.year_original = year_original
 
     @classmethod
-    def yatiml_savorize(cls, node: yatiml.ClassNode) -> None:
+    def yatiml_savorize(cls, node: yatiml.Node) -> None:
         node.dashes_to_unders_in_keys()
         node.rename_attribute('type', 'typ')
 
     @classmethod
-    def yatiml_sweeten(cls, node: yatiml.ClassNode) -> None:
+    def yatiml_sweeten(cls, node: yatiml.Node) -> None:
         node.rename_attribute('typ', 'type')
         node.unders_to_dashes_in_keys()
 
@@ -488,10 +488,10 @@ class CitationCFF:
             authors: List[Union[Person, Entity]],
             date_released: str,
             abstract: Optional[str] = None,
-            identifiers: Optional[List[Identifier]] = None
+            identifiers: Optional[List[Identifier]] = None,
             keywords: Optional[str] = None,
             references: Optional[List[Reference]] = None,
-            contact: Optional[List[Person, Entity]] = None,
+            contact: Optional[List[Union[Person, Entity]]] = None,
             doi: Optional[str] = None,
             commit: Optional[str] = None,
             license: Optional[str] = None,
@@ -538,9 +538,9 @@ class CitationCFF:
         self.url = url
 
     @classmethod
-    def yatiml_savorize(cls, node: yatiml.ClassNode) -> None:
+    def yatiml_savorize(cls, node: yatiml.Node) -> None:
         node.dashes_to_unders_in_keys()
 
     @classmethod
-    def yatiml_sweeten(cls, node: yatiml.ClassNode) -> None:
+    def yatiml_sweeten(cls, node: yatiml.Node) -> None:
         node.unders_to_dashes_in_keys()
